@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/default_margin"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/cardview_light_background"
+    app:cardCornerRadius="@dimen/cardview_default_radius"
+    app:cardElevation="@dimen/cardview_default_elevation">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_padding">
+
+        <ImageView
+            android:id="@+id/imageViewIcon"
+            android:layout_width="@dimen/pot_image_size"
+            android:layout_height="@dimen/pot_image_size"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/default_margin"
+            app:srcCompat="@drawable/pot_icon" />
+
+        <TextView
+            android:id="@+id/deviceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/imageViewIcon"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            tools:text="@string/hint_name" />
+
+        <TextView
+            android:id="@+id/deviceHumidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/deviceName"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/imageViewIcon"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            tools:text="@string/hint_humidity" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

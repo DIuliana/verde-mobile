@@ -1,14 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:outlineAmbientShadowColor="@color/colorPrimary"
+    android:outlineSpotShadowColor="@color/colorPrimary"
     tools:context="com.verde.ui.AddNewDevice">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment_prost" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="150dp"
+        android:outlineAmbientShadowColor="#00292323"
+        app:cardBackgroundColor="@color/cardview_light_background"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation">
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/default_padding">
+
+            <ImageView
+                android:id="@+id/pot_icon"
+                android:layout_width="104dp"
+                android:layout_height="@dimen/pot_image_size"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/default_margin"
+                app:srcCompat="@drawable/pot_icon" />
+
+
+            <Spinner
+                android:id="@+id/SAPSpinner"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:autofillHints="Select your pot"
+                android:prompt="@string/hint_humidity"
+                android:scrollbarSize="6dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/SAPPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:fontFamily="@font/aclonica"
+                    android:inputType="textPassword"
+                    android:lines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/connectButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_button"
+                android:defaultFocusHighlightEnabled="true"
+                android:fontFamily="@font/aclonica"
+                android:text="Connect" />
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
 
 </FrameLayout>
