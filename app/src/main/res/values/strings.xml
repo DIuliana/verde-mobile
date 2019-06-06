@@ -3,9 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hello_blank_fragment_prost">Hello blank fragment PROST</string>
     <string name="devicesListText">Here are your plants!</string>
     <string name="hint_name">Name</string>
     <string name="hint_humidity">Humidity</string>
     <string name="password">Password</string>
+    <string name="connect">Connect</string>
 </resources>

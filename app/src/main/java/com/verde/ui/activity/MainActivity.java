@@ -1,4 +1,4 @@
-package com.verde.ui;
+package com.verde.ui.activity;
 
 import android.os.Bundle;
 
