@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,24 +18,24 @@ import androidx.lifecycle.LifecycleRegistry;
 
 import com.example.verde.R;
 import com.verde.data.VerdeWifiProvider;
+import com.verde.data.VerdeWifiConnector;
+import com.verde.data.WifiStatus;
 
 
 public class AddNewDeviceFragment extends Fragment {
 
-    private Button connectButton;
     private Spinner spinner;
-    private EditText password;
     private ProgressBar progressBar;
-
+    private Context applicationContext;
     private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context applicationContext = getActivity().getApplicationContext();
+        applicationContext = getActivity().getApplicationContext();
 
         VerdeWifiProvider verdeWifiProvider = new VerdeWifiProvider(applicationContext);
-
         verdeWifiProvider.observe(this, verdeWifi -> {
             spinner.setAdapter(new SpinnerAdapter(applicationContext, R.layout.network_name_adapter, verdeWifi));
             progressBar.setVisibility(View.INVISIBLE);
@@ -45,15 +46,19 @@ public class AddNewDeviceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        connectButton = view.findViewById(R.id.connectButton);
+        Button connectButton = view.findViewById(R.id.connectButton);
+        EditText pass = view.findViewById(R.id.SAPPassword);
+        connectButton.setOnClickListener(v -> {
+            VerdeWifiConnector connector = new VerdeWifiConnector(applicationContext);
+            connector.observe(this, this::processWifiResponse);
+            connector.connectWifi(spinner.getSelectedItem().toString(), pass.getText().toString());
+        });
         spinner = view.findViewById(R.id.SAPSpinner);
-        password = view.findViewById(R.id.SAPPassword);
         progressBar = view.findViewById(R.id.progressBar);
 
         progressBar.setVisibility(View.VISIBLE);
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,37 +66,24 @@ public class AddNewDeviceFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_add_new_device, container, false);
     }
 
-    public LifecycleRegistry getLifecycleRegistry() {
-        return lifecycleRegistry;
+
+    private void processWifiResponse(WifiStatus wifiStatus) {
+
+        switch (wifiStatus) {
+
+            case CONNECTED:
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(applicationContext, "Pot connected!", Toast.LENGTH_SHORT).show();
+                break;
+            case CONNECTING:
+                progressBar.setVisibility(View.VISIBLE);
+                Toast.makeText(applicationContext, "Connecting...", Toast.LENGTH_SHORT).show();
+                break;
+            case NETWORK_NOT_FOUND:
+                Toast.makeText(applicationContext, "Could not connect. Please try again!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
-
-    //    connectButton.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            applicationContext.unregisterReceiver(receiver);
-//
-//            String ssid = spinner.getSelectedItem().toString();
-//            Editable key = password.getText();
-//
-//
-//            WifiConfiguration wifiConfiguration = new WifiConfiguration();
-//            wifiConfiguration.SSID = String.format("\"%s\"", ssid);
-//            wifiConfiguration.preSharedKey = String.format("\"%s\"", key);
-//
-//            wifiManager.disconnect();
-//            int netId = wifiManager.addNetwork(wifiConfiguration);
-//            if (netId == -1) {
-//                netId = getNetworkId(ssid);
-//            }
-//            wifiManager.enableNetwork(netId, true);
-//            boolean isConnected = wifiManager.reconnect();
-//            if (!isConnected) {
-//                Toast.makeText(applicationContext,
-//                        "Could not connect. Please try again!",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    });
 
 }

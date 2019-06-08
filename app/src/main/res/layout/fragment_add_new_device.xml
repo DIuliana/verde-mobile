@@ -66,6 +66,7 @@
                 android:background="@drawable/custom_button"
                 android:defaultFocusHighlightEnabled="true"
                 android:fontFamily="@font/aclonica"
+                android:textColor="@color/cardview_dark_background"
                 android:text="@string/connect" />
         </LinearLayout>
 
