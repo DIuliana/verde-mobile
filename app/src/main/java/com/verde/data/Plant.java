@@ -12,12 +12,14 @@ public class Plant {
     public int id;
     public String potId;
     public String name;
-    public double humidity;
+    public String species;
+    public double humidity = 60;
 
 
-    public Plant(String potId, String name, double humidity) {
+    public Plant(String potId, String name, String species) {
         this.potId = potId;
         this.name = name;
         this.humidity = humidity;
+        this.species = species;
     }
 }

@@ -31,6 +31,7 @@ public class SavePlantFragment extends Fragment {
     private PlantIdViewModel plantIdViewModel;
     private AddPlantViewModel addPlantViewModel;
     private String plantName;
+    private String plantSpecies;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,29 +47,26 @@ public class SavePlantFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button saveButton = view.findViewById(R.id.savePlantButton);
+        EditText name = view.findViewById(R.id.plantName);
+        Spinner species = view.findViewById(R.id.species);
         saveButton.setEnabled(false);
+
         saveButton.setOnClickListener(v -> {
+            plantName = name.getText().toString();
+            plantSpecies = species.getSelectedItem().toString();
             savePlant();
             findNavController(getView()).navigate(R.id.action_savePlant_to_homeFragment2);
 
         });
 
-        Spinner species = view.findViewById(R.id.species);
         species.setAdapter(new SpinnerAdapter(getContext(), R.layout.network_name_adapter, createSpeciesList()));
-
-        EditText name = view.findViewById(R.id.plantName);
         name.addTextChangedListener(new VerdeTextWatcher(saveButton));
-        plantName = name.getText().toString();
+
     }
 
     private void savePlant() {
-        Plant plant = new Plant(plantIdViewModel.getPotId(), plantName, getHumidityBySpecies());
+        Plant plant = new Plant(plantIdViewModel.getPotId(), plantName, plantSpecies);
         addPlantViewModel.addPlant(plant);
-    }
-
-    private double getHumidityBySpecies() {
-        //TODO
-        return 60;
     }
 
     private List<String> createSpeciesList() {
