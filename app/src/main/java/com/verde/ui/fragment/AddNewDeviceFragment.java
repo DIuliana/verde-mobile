@@ -14,12 +14,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleRegistry;
 
 import com.example.verde.R;
-import com.verde.data.VerdeWifiProvider;
 import com.verde.data.VerdeWifiConnector;
+import com.verde.data.VerdeWifiProvider;
 import com.verde.data.WifiStatus;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static androidx.navigation.Navigation.findNavController;
 
 
 public class AddNewDeviceFragment extends Fragment {
@@ -27,7 +31,6 @@ public class AddNewDeviceFragment extends Fragment {
     private Spinner spinner;
     private ProgressBar progressBar;
     private Context applicationContext;
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
 
     @Override
@@ -36,11 +39,12 @@ public class AddNewDeviceFragment extends Fragment {
         applicationContext = getActivity().getApplicationContext();
 
         VerdeWifiProvider verdeWifiProvider = new VerdeWifiProvider(applicationContext);
-        verdeWifiProvider.observe(this, verdeWifi -> {
-            spinner.setAdapter(new SpinnerAdapter(applicationContext, R.layout.network_name_adapter, verdeWifi));
+        verdeWifiProvider.observe(this, wifi -> {
+            spinner.setAdapter(new SpinnerAdapter(applicationContext, R.layout.network_name_adapter, extractVerdeWifi(wifi)));
             progressBar.setVisibility(View.INVISIBLE);
         });
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -66,6 +70,12 @@ public class AddNewDeviceFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_add_new_device, container, false);
     }
 
+    private List<String> extractVerdeWifi(List<String> wifis) {
+        List<String> res = wifis.stream().filter(wifi -> wifi.contains("Verde")).collect(Collectors.toList());
+        res.add(0, "Select your pot");
+        return res;
+    }
+
 
     private void processWifiResponse(WifiStatus wifiStatus) {
 
@@ -74,6 +84,7 @@ public class AddNewDeviceFragment extends Fragment {
             case CONNECTED:
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(applicationContext, "Pot connected!", Toast.LENGTH_SHORT).show();
+                findNavController(getView()).navigate(R.id.action_addNewDevice_to_internetConnection);
                 break;
             case CONNECTING:
                 progressBar.setVisibility(View.VISIBLE);
@@ -84,6 +95,5 @@ public class AddNewDeviceFragment extends Fragment {
 
         }
     }
-
 
 }

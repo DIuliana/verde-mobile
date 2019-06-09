@@ -33,9 +33,7 @@ public class VerdeWifiProvider extends LiveData<List<String>> {
 
 
     private List<String> extractVerdeSSID(List<ScanResult> wifiScanList) {
-        List<String> verde = wifiScanList.stream().map(net -> net.SSID).filter(net -> net.contains("Verde")).collect(Collectors.toList());
-        verde.add(0, "Select pot");
-        return verde;
+        return wifiScanList.stream().map(net -> net.SSID).collect(Collectors.toList());
     }
 
 
@@ -59,9 +57,4 @@ public class VerdeWifiProvider extends LiveData<List<String>> {
         }
 
     }
-
-    public ScanWifiReceiver getScanWifiReceiver() {
-        return scanWifiReceiver;
-    }
-
 }
