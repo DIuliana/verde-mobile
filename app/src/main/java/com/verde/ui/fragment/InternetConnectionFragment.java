@@ -19,9 +19,13 @@ import com.example.verde.R;
 import com.verde.data.HTTPCallsStatus;
 import com.verde.data.VerdeHttpHelper;
 import com.verde.data.VerdeWifiProvider;
+import com.verde.ui.fragment.components.SpinnerAdapter;
+import com.verde.ui.fragment.components.VerdeTextWatcher;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static androidx.navigation.Navigation.findNavController;
 
 
 public class InternetConnectionFragment extends Fragment {
@@ -58,11 +62,12 @@ public class InternetConnectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Button connectButton = view.findViewById(R.id.internetConnButton);
         pass = view.findViewById(R.id.internetPass);
+        pass.addTextChangedListener(new VerdeTextWatcher(connectButton));
         spinner = view.findViewById(R.id.internetSpinner);
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        Button connectButton = view.findViewById(R.id.internetConnButton);
         connectButton.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
             httpHelper = new VerdeHttpHelper(applicationContext);
@@ -94,8 +99,7 @@ public class InternetConnectionFragment extends Fragment {
                 break;
             case CONNECTED:
                 progressBar.setVisibility(View.INVISIBLE);
-
-                //TODO go next
+                findNavController(getView()).navigate(R.id.action_successPotConnection_to_savePlant);
                 break;
         }
     }

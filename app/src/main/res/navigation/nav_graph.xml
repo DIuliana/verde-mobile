@@ -30,5 +30,19 @@
         android:id="@+id/successPotConnection"
         android:name="com.verde.ui.fragment.InternetConnectionFragment"
         android:label="fragment_success_pot_connection"
-        tools:layout="@layout/fragment_provide_internet_connection" />
+        tools:layout="@layout/fragment_provide_internet_connection" >
+
+        <action
+            android:id="@+id/action_successPotConnection_to_savePlant"
+            app:destination="@id/savePlant" />
+    </fragment>
+    <fragment
+        android:id="@+id/savePlant"
+        android:name="com.verde.ui.fragment.SavePlantFragment"
+        android:label="fragment_save_plant"
+        tools:layout="@layout/fragment_save_plant" >
+        <action
+            android:id="@+id/action_savePlant_to_homeFragment2"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

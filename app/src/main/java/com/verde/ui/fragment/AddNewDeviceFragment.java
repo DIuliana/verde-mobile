@@ -14,11 +14,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.verde.R;
 import com.verde.data.VerdeWifiConnector;
 import com.verde.data.VerdeWifiProvider;
 import com.verde.data.WifiStatus;
+import com.verde.ui.fragment.components.VerdeTextWatcher;
+import com.verde.ui.model.PlantIdViewModel;
+import com.verde.ui.fragment.components.SpinnerAdapter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,15 +32,18 @@ import static androidx.navigation.Navigation.findNavController;
 
 public class AddNewDeviceFragment extends Fragment {
 
+    private PlantIdViewModel plantIdViewModel;
     private Spinner spinner;
     private ProgressBar progressBar;
     private Context applicationContext;
+    private String ssid;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         applicationContext = getActivity().getApplicationContext();
+        plantIdViewModel = ViewModelProviders.of(getActivity()).get(PlantIdViewModel.class);
 
         VerdeWifiProvider verdeWifiProvider = new VerdeWifiProvider(applicationContext);
         verdeWifiProvider.observe(this, wifi -> {
@@ -52,10 +59,13 @@ public class AddNewDeviceFragment extends Fragment {
 
         Button connectButton = view.findViewById(R.id.connectButton);
         EditText pass = view.findViewById(R.id.SAPPassword);
+        pass.addTextChangedListener(new VerdeTextWatcher(connectButton));
         connectButton.setOnClickListener(v -> {
             VerdeWifiConnector connector = new VerdeWifiConnector(applicationContext);
             connector.observe(this, this::processWifiResponse);
-            connector.connectWifi(spinner.getSelectedItem().toString(), pass.getText().toString());
+            ssid = spinner.getSelectedItem().toString();
+            connector.connectWifi(ssid, pass.getText().toString());
+
         });
         spinner = view.findViewById(R.id.SAPSpinner);
         progressBar = view.findViewById(R.id.progressBar);
@@ -84,6 +94,7 @@ public class AddNewDeviceFragment extends Fragment {
             case CONNECTED:
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(applicationContext, "Pot connected!", Toast.LENGTH_SHORT).show();
+                plantIdViewModel.setPotId(ssid);
                 findNavController(getView()).navigate(R.id.action_addNewDevice_to_internetConnection);
                 break;
             case CONNECTING:

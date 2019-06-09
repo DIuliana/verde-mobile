@@ -62,6 +62,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/custom_button"
                 android:defaultFocusHighlightEnabled="true"
+                android:enabled="false"
                 android:fontFamily="@font/aclonica"
                 android:text="@string/connect"
                 android:textColor="@color/cardview_dark_background" />

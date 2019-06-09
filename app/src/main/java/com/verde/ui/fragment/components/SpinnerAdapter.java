@@ -1,4 +1,4 @@
-package com.verde.ui.fragment;
+package com.verde.ui.fragment.components;
 
 import android.content.Context;
 import android.graphics.Typeface;

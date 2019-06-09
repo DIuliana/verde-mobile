@@ -4,16 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:outlineAmbientShadowColor="@color/colorPrimary"
-    android:outlineSpotShadowColor="@color/colorPrimary"
-    tools:context="com.verde.ui.fragment.AddNewDeviceFragment">
+    tools:context="com.verde.ui.fragment.SavePlantFragment">
 
+    <TextView
+        android:id="@+id/deviceListText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/aclonica"
+        android:text="@string/save_plant_message"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="200dp"
         android:outlineAmbientShadowColor="#00292323"
         app:cardBackgroundColor="@color/cardview_light_background"
         app:cardCornerRadius="@dimen/cardview_default_radius"
@@ -34,11 +42,10 @@
                 android:layout_height="@dimen/pot_image_size"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/default_margin"
-                app:srcCompat="@drawable/pot_icon" />
-
+                app:srcCompat="@drawable/pot_icon_green" />
 
             <Spinner
-                android:id="@+id/SAPSpinner"
+                android:id="@+id/species"
                 style="@style/Widget.AppCompat.Spinner.Underlined"
                 android:layout_width="266dp"
                 android:layout_height="50dp"
@@ -46,40 +53,28 @@
                 android:layout_marginBottom="10dp"
                 android:scrollbarSize="6dp" />
 
-
             <EditText
-                android:id="@+id/SAPPassword"
+                android:id="@+id/plantName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/aclonica"
-                android:textColor="@color/colorPrimary"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:lines="1" />
+                android:hint="@string/name"
+                android:lines="1"
+                android:textColor="@color/colorPrimary" />
 
 
             <Button
-                android:id="@+id/connectButton"
-                android:enabled="false"
+                android:id="@+id/savePlantButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/custom_button"
                 android:defaultFocusHighlightEnabled="true"
+                android:enabled="false"
                 android:fontFamily="@font/aclonica"
-                android:textColor="@color/cardview_dark_background"
-                android:text="@string/connect" />
+                android:text="@string/save"
+                android:textColor="@color/cardview_dark_background" />
         </LinearLayout>
 
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="98dp"
-            android:layout_height="97dp"
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center"/>
-
     </androidx.cardview.widget.CardView>
-
-
 </FrameLayout>
