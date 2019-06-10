@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.verde.R;
 import com.verde.data.Plant;
 import com.verde.ui.model.PlantListViewModel;
+import com.verde.ui.model.WebSocketDataViewModel;
 
 import java.util.List;
 
@@ -24,7 +25,8 @@ import static androidx.navigation.Navigation.findNavController;
 public class HomeFragment extends Fragment implements PlantListAdapter.OnItemClickListener {
 
 
-    PlantListViewModel plantListViewModel;
+    private PlantListViewModel plantListViewModel;
+    private WebSocketDataViewModel webSocketDataViewModel;
 
 
     @Override
@@ -32,6 +34,12 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
         super.onCreate(savedInstanceState);
 
         plantListViewModel = ViewModelProviders.of(this).get(PlantListViewModel.class);
+        webSocketDataViewModel = ViewModelProviders.of(this).get(WebSocketDataViewModel.class);
+        createWebSocket();
+    }
+
+    private void createWebSocket() {
+        new VerdeWebSocket("Verde_31529819901", webSocketDataViewModel);
     }
 
     @Override
@@ -52,7 +60,7 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
     }
 
     private void populatePlantList(List<Plant> plants, View view) {
-        ((RecyclerView) view).setAdapter(new PlantListAdapter(plants, this));
+        ((RecyclerView) view).setAdapter(new PlantListAdapter(this, plants, webSocketDataViewModel));
     }
 
 
