@@ -1,4 +1,4 @@
-package com.verde.ui.fragment;
+package com.verde.data;
 
 import com.verde.ui.model.WebSocketDataViewModel;
 
@@ -11,10 +11,10 @@ import java.util.HashMap;
 
 import tech.gusavila92.websocketclient.WebSocketClient;
 
-class VerdeWebSocket extends WebSocketClient {
+public class VerdeWebSocket extends WebSocketClient {
 
     private static final String WS_PROTOCOL = "ws://";
-    private static final String WS_HOST = "03f33535.ngrok.io";
+    private static final String WS_HOST = "71ddba2e.ngrok.io";
     private static final String WS_ENDPOINT = "/verde/socket/mobile/";
     private WebSocketDataViewModel webSocketDataViewModel;
     private String potId;
@@ -45,18 +45,12 @@ class VerdeWebSocket extends WebSocketClient {
     @Override
     public void onOpen() {
         System.out.println("onOpen");
-        createTargetHumidityRequest();
-        this.send(targetHumidity.toString());
-    }
 
-    //TODO send actual target_humidity
-    private void createTargetHumidityRequest() {
-        targetHumidity = new JSONObject();
-        try {
-            targetHumidity.put("target_humidity", "60");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Boolean aBoolean = webSocketDataViewModel.getJustOpenedMap().get(potId);
+        if (aBoolean!=null && aBoolean) {
+           sendTargetHumidity("what_ever");
+        } else
+            this.send("Hi! here is mobile " + potId);
     }
 
     @Override
@@ -65,7 +59,7 @@ class VerdeWebSocket extends WebSocketClient {
 
         //TODO parse message
         map.put(potId, message);
-        webSocketDataViewModel.getMap().postValue(map);
+        webSocketDataViewModel.getMessagesMap().postValue(map);
     }
 
     @Override
@@ -92,5 +86,32 @@ class VerdeWebSocket extends WebSocketClient {
     public void onCloseReceived() {
         System.out.println("onCloseReceived");
     }
+
+
+    public void sendTargetHumidity(String plantSpecies) {
+        System.out.println("sendTargetHumidity ");
+        int targetHumidityOfSpecies = getTargetHumidityOfSpecies(plantSpecies);
+        JSONObject targetHumidityRequest = createTargetHumidityRequest(String.valueOf(targetHumidityOfSpecies));
+        this.send(targetHumidityRequest.toString());
+    }
+
+    //TODO repo
+    private int getTargetHumidityOfSpecies(String plantSpecies) {
+        return 60;
+    }
+
+    //TODO send actual target_humidity
+    private JSONObject createTargetHumidityRequest(String targetHumidity) {
+        JSONObject targetHumidityJSON = new JSONObject();
+        try {
+            targetHumidityJSON.put("target_humidity", targetHumidity);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return targetHumidityJSON;
+    }
+
+
 }
 

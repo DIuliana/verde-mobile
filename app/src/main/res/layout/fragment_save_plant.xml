@@ -74,7 +74,17 @@
                 android:fontFamily="@font/aclonica"
                 android:text="@string/save"
                 android:textColor="@color/cardview_dark_background" />
+
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:visibility="invisible"
+            android:layout_width="98dp"
+            android:layout_height="97dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp" />
+
 
     </androidx.cardview.widget.CardView>
 </FrameLayout>

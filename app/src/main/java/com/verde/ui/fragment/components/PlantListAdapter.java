@@ -1,4 +1,4 @@
-package com.verde.ui.fragment;
+package com.verde.ui.fragment.components;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +23,7 @@ public class PlantListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     Fragment fragment;
 
 
-    interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onItemClick(Plant plant, View view);
     }
 
@@ -68,7 +68,7 @@ public class PlantListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             displayName.setText(plant.name);
             displaySpecies.setText(plant.species);
 
-            webSocketDataViewModel.getMap().observe(fragment, stringStringMap -> displayHumidity.setText(stringStringMap.get(plant.potId)));
+            webSocketDataViewModel.getMessagesMap().observe(fragment, stringStringMap -> displayHumidity.setText(stringStringMap.get(plant.potId)));
 
             itemView.setOnClickListener(v -> clickListener.onItemClick(plant, itemView));
         }

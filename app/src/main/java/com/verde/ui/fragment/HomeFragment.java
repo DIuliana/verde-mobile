@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.verde.R;
 import com.verde.data.Plant;
+import com.verde.data.VerdeSocketProvider;
+import com.verde.ui.fragment.components.PlantListAdapter;
 import com.verde.ui.model.PlantListViewModel;
 import com.verde.ui.model.WebSocketDataViewModel;
 
@@ -27,6 +29,7 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
 
     private PlantListViewModel plantListViewModel;
     private WebSocketDataViewModel webSocketDataViewModel;
+    private VerdeSocketProvider verdeSocketProvider;
 
 
     @Override
@@ -35,11 +38,7 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
 
         plantListViewModel = ViewModelProviders.of(this).get(PlantListViewModel.class);
         webSocketDataViewModel = ViewModelProviders.of(this).get(WebSocketDataViewModel.class);
-        createWebSocket();
-    }
-
-    private void createWebSocket() {
-        new VerdeWebSocket("Verde_31529819901", webSocketDataViewModel);
+        verdeSocketProvider = ViewModelProviders.of(this).get(VerdeSocketProvider.class);
     }
 
     @Override
@@ -55,8 +54,21 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
         view.findViewById(R.id.addFab).setOnClickListener(v ->
                 findNavController(v).navigate(R.id.action_homeFragment2_to_addNewDevice));
 
-        plantListViewModel.getPlants().observe(this, plants ->
-                populatePlantList(plants, view.findViewById(R.id.deviceRecyclerView)));
+        plantListViewModel.getPlants().observe(this, plants -> {
+            populatePlantList(plants, view.findViewById(R.id.deviceRecyclerView));
+            createWebSockets(plants);
+        });
+    }
+
+    private void createWebSockets(List<Plant> plants) {
+        plants.forEach(plant -> createWebSocketIfItDoesNotExist(plant));
+    }
+
+    private void createWebSocketIfItDoesNotExist(Plant plant) {
+
+        if (verdeSocketProvider.getSocketByPotId(plant.potId) == null) {
+            verdeSocketProvider.createWebSocket(plant.potId, webSocketDataViewModel);
+        }
     }
 
     private void populatePlantList(List<Plant> plants, View view) {

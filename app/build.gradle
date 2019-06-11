@@ -42,4 +42,5 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.0.0'
     implementation 'tech.gusavila92:java-android-websocket-client:1.2.2'
     annotationProcessor 'androidx.room:room-compiler:2.0.0'
+    implementation 'android.arch.work:work-runtime:1.0.1'
 }
