@@ -16,6 +16,7 @@ import com.example.verde.R;
 import com.verde.data.Plant;
 import com.verde.data.VerdeSocketProvider;
 import com.verde.ui.fragment.components.PlantListAdapter;
+import com.verde.ui.model.PlantIdViewModel;
 import com.verde.ui.model.PlantListViewModel;
 import com.verde.ui.model.WebSocketDataViewModel;
 
@@ -28,6 +29,7 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
 
 
     private PlantListViewModel plantListViewModel;
+    private PlantIdViewModel plantIdViewModel;
     private WebSocketDataViewModel webSocketDataViewModel;
     private VerdeSocketProvider verdeSocketProvider;
 
@@ -37,8 +39,9 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
         super.onCreate(savedInstanceState);
 
         plantListViewModel = ViewModelProviders.of(this).get(PlantListViewModel.class);
-        webSocketDataViewModel = ViewModelProviders.of(this).get(WebSocketDataViewModel.class);
-        verdeSocketProvider = ViewModelProviders.of(this).get(VerdeSocketProvider.class);
+        webSocketDataViewModel = ViewModelProviders.of(getActivity()).get(WebSocketDataViewModel.class);
+        verdeSocketProvider = ViewModelProviders.of(getActivity()).get(VerdeSocketProvider.class);
+        plantIdViewModel = ViewModelProviders.of(getActivity()).get(PlantIdViewModel.class);
     }
 
     @Override
@@ -51,13 +54,16 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //redirect at button click
         view.findViewById(R.id.addFab).setOnClickListener(v ->
                 findNavController(v).navigate(R.id.action_homeFragment2_to_addNewDevice));
 
+        //populate the plant list
         plantListViewModel.getPlants().observe(this, plants -> {
             populatePlantList(plants, view.findViewById(R.id.deviceRecyclerView));
             createWebSockets(plants);
         });
+
     }
 
     private void createWebSockets(List<Plant> plants) {
@@ -79,6 +85,9 @@ public class HomeFragment extends Fragment implements PlantListAdapter.OnItemCli
     @Override
     public void onItemClick(Plant plant, View view) {
         Toast.makeText(getContext(), "Go to details", Toast.LENGTH_SHORT).show();
+
+        plantIdViewModel.setPotId(plant.potId);
+        findNavController(view).navigate(R.id.action_homeFragment_to_plantDetailsFragment);
 
     }
 }

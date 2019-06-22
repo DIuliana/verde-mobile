@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/default_margin"
+    android:layout_marginStart="50dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/cardview_light_background"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cardview_shadow_end_color"
+        android:paddingLeft="16dp"
+        android:paddingTop="@dimen/default_padding"
+        android:paddingRight="16dp"
+        android:paddingBottom="@dimen/default_padding">
+
+        <ImageView
+            android:id="@+id/imageViewIcon"
+            android:layout_width="126dp"
+            android:layout_height="126dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp"
+            app:srcCompat="@drawable/pot_icon_green" />
+
+
+        <EditText
+            android:inputType="number"
+            android:id="@+id/humidity"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageViewIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="14dp"
+            tools:text="@string/hint_humidity" />
+
+
+        <Button
+            android:id="@+id/sendHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/humidity"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="13dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+            android:text="Set humidity" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

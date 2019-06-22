@@ -48,8 +48,8 @@ public class SavePlantFragment extends Fragment {
         super.onCreate(savedInstanceState);
         plantIdViewModel = ViewModelProviders.of(getActivity()).get(PlantIdViewModel.class);
         addPlantViewModel = ViewModelProviders.of(this).get(AddPlantViewModel.class);
-        webSocketDataViewModel = ViewModelProviders.of(this).get(WebSocketDataViewModel.class);
-        verdeSocketProvider = ViewModelProviders.of(this).get(VerdeSocketProvider.class);
+        webSocketDataViewModel = ViewModelProviders.of(getActivity()).get(WebSocketDataViewModel.class);
+        verdeSocketProvider = ViewModelProviders.of(getActivity()).get(VerdeSocketProvider.class);
     }
 
 

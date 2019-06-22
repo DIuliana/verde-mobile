@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_homeFragment2_to_addNewDevice"
             app:destination="@id/addNewDevice" />
+        <action
+            android:id="@+id/action_homeFragment_to_plantDetailsFragment"
+            app:destination="@id/plantDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNewDevice"
@@ -45,4 +48,9 @@
             android:id="@+id/action_savePlant_to_homeFragment2"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/plantDetailsFragment"
+        android:name="com.verde.ui.fragment.PlantDetailsFragment"
+        android:label="fragment_plant_details"
+        tools:layout="@layout/fragment_plant_details" />
 </navigation>

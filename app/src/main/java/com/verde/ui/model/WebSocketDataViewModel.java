@@ -19,6 +19,8 @@ public class WebSocketDataViewModel extends AndroidViewModel {
         super(application);
     }
 
+
+    //TODO delete from map when disconnected
     public MediatorLiveData<Map<String, String>> getMessagesMap() {
         return messagesMap;
     }

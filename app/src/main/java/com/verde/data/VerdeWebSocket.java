@@ -12,9 +12,9 @@ import java.util.HashMap;
 import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class VerdeWebSocket extends WebSocketClient {
-
+        
     private static final String WS_PROTOCOL = "ws://";
-    private static final String WS_HOST = "71ddba2e.ngrok.io";
+    private static final String WS_HOST = "55ab4c51.ngrok.io";
     private static final String WS_ENDPOINT = "/verde/socket/mobile/";
     private WebSocketDataViewModel webSocketDataViewModel;
     private String potId;
@@ -57,8 +57,9 @@ public class VerdeWebSocket extends WebSocketClient {
     public void onTextReceived(String message) {
         System.out.println("onTextReceived: " + message);
 
+        String lala = new String(potId);
         //TODO parse message
-        map.put(potId, message);
+        map.put(this.potId, message);
         webSocketDataViewModel.getMessagesMap().postValue(map);
     }
 
@@ -95,9 +96,15 @@ public class VerdeWebSocket extends WebSocketClient {
         this.send(targetHumidityRequest.toString());
     }
 
+    public void sendTarget(String target) {
+
+        JSONObject targetHumidityRequest = createTargetHumidityRequest(target);
+        this.send(targetHumidityRequest.toString());
+    }
+
     //TODO repo
     private int getTargetHumidityOfSpecies(String plantSpecies) {
-        return 60;
+        return 40;
     }
 
     //TODO send actual target_humidity
