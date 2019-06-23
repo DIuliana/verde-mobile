@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,25 +17,25 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.verde.R;
 import com.verde.data.VerdeSocketProvider;
+import com.verde.data.VerdeWebSocket;
 import com.verde.ui.fragment.components.VerdeTextWatcher;
 import com.verde.ui.model.PlantIdViewModel;
-import com.verde.ui.model.WebSocketDataViewModel;
+import com.verde.ui.model.PlantViewModel;
 
 
 public class PlantDetailsFragment extends Fragment {
 
-
-    private WebSocketDataViewModel webSocketDataViewModel;
     private VerdeSocketProvider verdeSocketProvider;
     private PlantIdViewModel plantIdViewModel;
+    private PlantViewModel plantViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        webSocketDataViewModel = ViewModelProviders.of(getActivity()).get(WebSocketDataViewModel.class);
         verdeSocketProvider = ViewModelProviders.of(getActivity()).get(VerdeSocketProvider.class);
         plantIdViewModel = ViewModelProviders.of(getActivity()).get(PlantIdViewModel.class);
+        plantViewModel = ViewModelProviders.of(getActivity()).get(PlantViewModel.class);
     }
 
     @Override
@@ -56,20 +57,27 @@ public class PlantDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         EditText humidity = view.findViewById(R.id.humidity);
+        TextView actualHumidity = view.findViewById(R.id.detail_humi);
+        TextView name = view.findViewById(R.id.plantNameDetails);
+        name.setText(plantViewModel.getPlantName());
         Button sendHumidity = view.findViewById(R.id.sendHumidity);
         humidity.addTextChangedListener(new VerdeTextWatcher(sendHumidity));
 
         String potId = plantIdViewModel.getPotId();
-
-
         if (verdeSocketProvider.getSocketByPotId(potId) == null) {
-            verdeSocketProvider.createWebSocket(potId, webSocketDataViewModel);
+            verdeSocketProvider.createWebSocket(potId);
         }
 
+        VerdeWebSocket socket = verdeSocketProvider.getSocketByPotId(potId);
+
+        socket.getMessage().observe(this, message -> actualHumidity.setText(message));
+
+
         sendHumidity.setOnClickListener(v -> {
-            String s = humidity.getText().toString();
-            verdeSocketProvider.getSocketByPotId(potId).sendTarget(s);
-            Toast.makeText(getContext(), "Sent humidity: " + s, Toast.LENGTH_SHORT).show();
+            String newHumidity = humidity.getText().toString();
+            socket.sendTarget(newHumidity);
+
+            Toast.makeText(getContext(), "Sent humidity: " + newHumidity, Toast.LENGTH_SHORT).show();
 
         });
 

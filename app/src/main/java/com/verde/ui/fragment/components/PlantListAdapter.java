@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.verde.R;
 import com.verde.data.Plant;
-import com.verde.ui.model.WebSocketDataViewModel;
+import com.verde.data.VerdeSocketProvider;
+import com.verde.data.VerdeWebSocket;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class PlantListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private List<Plant> plants;
     private OnItemClickListener clickListener;
-    WebSocketDataViewModel webSocketDataViewModel;
+    VerdeSocketProvider verdeSocketProvider;
     Fragment fragment;
 
 
@@ -27,10 +28,10 @@ public class PlantListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void onItemClick(Plant plant, View view);
     }
 
-    public PlantListAdapter(Fragment fragment, List<Plant> plants, WebSocketDataViewModel webSocketDataViewModel) {
+    public PlantListAdapter(Fragment fragment, List<Plant> plants, VerdeSocketProvider verdeSocketProvider) {
         this.plants = plants;
         this.clickListener = (OnItemClickListener) fragment;
-        this.webSocketDataViewModel = webSocketDataViewModel;
+        this.verdeSocketProvider = verdeSocketProvider;
         this.fragment = fragment;
     }
 
@@ -46,7 +47,7 @@ public class PlantListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).bind(plants.get(position), clickListener, webSocketDataViewModel);
+        ((ViewHolder) holder).bind(plants.get(position), clickListener, verdeSocketProvider);
     }
 
     @Override
@@ -61,14 +62,15 @@ public class PlantListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(itemView);
         }
 
-        public void bind(Plant plant, OnItemClickListener clickListener, WebSocketDataViewModel webSocketDataViewModel) {
+        public void bind(Plant plant, OnItemClickListener clickListener, VerdeSocketProvider verdeSocketProvider) {
             TextView displayName = itemView.findViewById(R.id.deviceName);
             TextView displaySpecies = itemView.findViewById(R.id.deviceSpecies);
             TextView displayHumidity = itemView.findViewById(R.id.deviceHumidity);
             displayName.setText(plant.name);
             displaySpecies.setText(plant.species);
 
-            webSocketDataViewModel.getMessagesMap().observe(fragment, stringStringMap -> displayHumidity.setText(stringStringMap.get(plant.potId)));
+            VerdeWebSocket socketByPotId = verdeSocketProvider.getSocketByPotId(plant.potId);
+            socketByPotId.getMessage().observe(fragment, message -> displayHumidity.setText(message));
 
             itemView.setOnClickListener(v -> clickListener.onItemClick(plant, itemView));
         }

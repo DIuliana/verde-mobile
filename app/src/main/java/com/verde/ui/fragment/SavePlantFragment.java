@@ -22,7 +22,6 @@ import com.verde.ui.fragment.components.SpinnerAdapter;
 import com.verde.ui.fragment.components.VerdeTextWatcher;
 import com.verde.ui.model.AddPlantViewModel;
 import com.verde.ui.model.PlantIdViewModel;
-import com.verde.ui.model.WebSocketDataViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +36,6 @@ public class SavePlantFragment extends Fragment {
     private PlantIdViewModel plantIdViewModel;
     private AddPlantViewModel addPlantViewModel;
     private VerdeSocketProvider verdeSocketProvider;
-    private WebSocketDataViewModel webSocketDataViewModel;
     private String plantName;
     private String plantSpecies;
     private String potId;
@@ -48,7 +46,6 @@ public class SavePlantFragment extends Fragment {
         super.onCreate(savedInstanceState);
         plantIdViewModel = ViewModelProviders.of(getActivity()).get(PlantIdViewModel.class);
         addPlantViewModel = ViewModelProviders.of(this).get(AddPlantViewModel.class);
-        webSocketDataViewModel = ViewModelProviders.of(getActivity()).get(WebSocketDataViewModel.class);
         verdeSocketProvider = ViewModelProviders.of(getActivity()).get(VerdeSocketProvider.class);
     }
 
@@ -79,10 +76,9 @@ public class SavePlantFragment extends Fragment {
     }
 
     private void createWebSocket() {
-        verdeSocketProvider.createWebSocket(potId, webSocketDataViewModel);
+        verdeSocketProvider.createWebSocket(potId);
         Map<String, Boolean> justCreated = new HashMap<>();
         justCreated.put(potId, true);
-        webSocketDataViewModel.setJustOpenedMap(justCreated);
 
     }
 

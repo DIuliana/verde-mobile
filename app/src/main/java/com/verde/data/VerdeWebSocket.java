@@ -1,33 +1,30 @@
 package com.verde.data;
 
-import com.verde.ui.model.WebSocketDataViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 
 import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class VerdeWebSocket extends WebSocketClient {
-        
-    private static final String WS_PROTOCOL = "ws://";
-    private static final String WS_HOST = "55ab4c51.ngrok.io";
-    private static final String WS_ENDPOINT = "/verde/socket/mobile/";
-    private WebSocketDataViewModel webSocketDataViewModel;
-    private String potId;
-    private HashMap<String, String> map = new HashMap<>();
-    private JSONObject targetHumidity;
 
-    public VerdeWebSocket(String potId, WebSocketDataViewModel webSocketDataViewModel) {
+    private static final String WS_PROTOCOL = "ws://";
+    private static final String WS_HOST = "9b66f678.ngrok.io";
+    private static final String WS_ENDPOINT = "/verde/socket/mobile/";
+    private MediatorLiveData<String> message = new MediatorLiveData<>();
+    private String potId;
+
+    public VerdeWebSocket(String potId) {
         super(createUri(potId));
         setConnectTimeout(10000);
         setReadTimeout(60000);
         enableAutomaticReconnection(5000);
         connect();
-        this.webSocketDataViewModel = webSocketDataViewModel;
         this.potId = potId;
     }
 
@@ -46,21 +43,15 @@ public class VerdeWebSocket extends WebSocketClient {
     public void onOpen() {
         System.out.println("onOpen");
 
-        Boolean aBoolean = webSocketDataViewModel.getJustOpenedMap().get(potId);
-        if (aBoolean!=null && aBoolean) {
-           sendTargetHumidity("what_ever");
-        } else
-            this.send("Hi! here is mobile " + potId);
+        this.send("Hi! here is mobile " + potId);
     }
 
     @Override
     public void onTextReceived(String message) {
         System.out.println("onTextReceived: " + message);
 
-        String lala = new String(potId);
         //TODO parse message
-        map.put(this.potId, message);
-        webSocketDataViewModel.getMessagesMap().postValue(map);
+        this.message.postValue(message);
     }
 
     @Override
@@ -119,6 +110,9 @@ public class VerdeWebSocket extends WebSocketClient {
         return targetHumidityJSON;
     }
 
+    public LiveData<String> getMessage() {
+        return message;
+    }
 
 }
 
